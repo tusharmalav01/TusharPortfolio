@@ -1,9 +1,31 @@
 import { motion } from "framer-motion";
 import { Menu, Moon, MoonIcon, Sun, X } from "lucide-react";
-import { useState } from "react"
+import { useState ,useEffect } from "react"
+import logo from '../assets/logo.png'
 
 const Navv = ({darkMode, toggleDarkMode}) => {
-    const [activeSection, setActiveSection] = useState('home');
+            const [activeSection, setActiveSection] = useState('home');
+                useEffect(() => {
+            const sections = document.querySelectorAll("section[id]");
+
+            const observer = new IntersectionObserver(
+                (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                    setActiveSection(entry.target.id);
+                    }
+                });
+                },
+                {
+                threshold: 0.3, // 60% section visible
+                }
+            );
+
+            sections.forEach((section) => observer.observe(section));
+
+            return () => observer.disconnect();
+            }, []);
+
     const[isMenuOpen,setIsMenuOpen] = useState(false)
 
     const navItems = [
@@ -52,7 +74,15 @@ const Navv = ({darkMode, toggleDarkMode}) => {
                 whileHover={{scale:1.05}}
                 className="flex items-center space-x-2">
                     <span className={`text-xl font-bold ${colors.textPrimary}`}>
-                        Portfolio <span className="text-orange-500">.</span>
+                       <img
+  src={logo}
+  alt="Logo"
+  className={`h-8 lg:h-10 w-auto object-contain ${
+    darkMode ? "invert" : ""
+  }`}
+/>
+
+                        {/* <span className="text-orange-500">.</span> */}
                     </span>
 
                     
